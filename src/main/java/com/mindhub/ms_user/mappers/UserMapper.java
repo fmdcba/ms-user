@@ -17,4 +17,15 @@ public class UserMapper {
         return users.stream().map(user -> new UserDTO(user)).toList();
     }
 
+    public UserEntity userToEntity (UserDTO user){
+        return new UserEntity(user.getUsername(), user.getEmail(), user.getRoles());
+    }
+
+    public UserEntity updateUserToEntity (UserEntity userToUpdate, UserDTO updatedUser) {
+        userToUpdate.setUsername(updatedUser.getUsername());
+        userToUpdate.setEmail(updatedUser.getEmail());
+        userToUpdate.setRoles(updatedUser.getRoles());
+
+        return userToUpdate;
+    }
 }
