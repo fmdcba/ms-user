@@ -20,7 +20,7 @@ public class UserController {
     private UserMapper userMapper;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getUser(@PathVariable long id) throws Exception {
