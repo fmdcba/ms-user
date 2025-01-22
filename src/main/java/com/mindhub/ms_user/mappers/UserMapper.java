@@ -1,5 +1,6 @@
 package com.mindhub.ms_user.mappers;
 
+import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.models.UserEntity;
 import org.springframework.stereotype.Component;
@@ -27,5 +28,9 @@ public class UserMapper {
         userToUpdate.setRoles(updatedUser.getRoles());
 
         return userToUpdate;
+    }
+
+    public List<RolesDTO> usersRolesListToDTO(List<UserEntity> users) {
+        return users.stream().map(user -> new RolesDTO(user.getId(), user.getRoles())).toList();
     }
 }

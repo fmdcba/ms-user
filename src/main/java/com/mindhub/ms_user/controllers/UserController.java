@@ -1,5 +1,6 @@
 package com.mindhub.ms_user.controllers;
 
+import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.mappers.UserMapper;
 import com.mindhub.ms_user.models.UserEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -21,26 +22,32 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<?> getUser(@PathVariable long id) throws Exception {
         //validateId from the request
         UserDTO user = userMapper.userToDTO(userRepository.findById(id).orElseThrow(() -> new Exception("Not Found.")));
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         List<UserDTO> users = userMapper.userListToDTO(userRepository.findAll());
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping
+    @GetMapping("/roles")
+    public ResponseEntity<?> getRoles() {
+        List<RolesDTO> roles = userMapper.usersRolesListToDTO(userRepository.findAll());
+        return new ResponseEntity<>(roles, HttpStatus.OK);
+    }
+
+    @PostMapping("/users")
     public ResponseEntity<?> createUser(@RequestBody UserDTO newUser) {
         UserEntity newUserEntity = userRepository.save(userMapper.userToEntity(newUser));
         return new ResponseEntity<>(newUserEntity, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO updatedUser) throws Exception {
         //validate ID
         //validate entries for put
@@ -49,7 +56,7 @@ public class UserController {
         return new ResponseEntity<>(updatedUserToEntity, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
         return new ResponseEntity<>("User deleted successfully.", HttpStatus.OK);
