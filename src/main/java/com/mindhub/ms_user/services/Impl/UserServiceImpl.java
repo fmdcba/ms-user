@@ -1,5 +1,6 @@
 package com.mindhub.ms_user.services.Impl;
 
+import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.mappers.UserMapper;
 import com.mindhub.ms_user.models.UserEntity;
@@ -21,47 +22,53 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO getUser() {
-        return null;
+    public UserDTO getUser(Long id) throws Exception {
+        return userMapper.userToDTO(findById(id));
     }
 
     @Override
     public List<UserDTO> getAllusers() {
-        return List.of();
+        return  userMapper.userListToDTO(userRepository.findAll());
     }
 
     @Override
-    public UserDTO createUser() {
-        return null;
+    public List<RolesDTO> getAllRoles() {
+        return userMapper.usersRolesListToDTO(findAll());
     }
 
     @Override
-    public UserDTO updateUser() {
-        return null;
+    public UserEntity createUser(UserDTO newUser) {
+        return save(userMapper.userToEntity(newUser));
     }
 
     @Override
-    public void deleteUser() {
-
+    public UserEntity updateUser(Long id, UserDTO updatedUser) throws Exception {
+        UserEntity userToUpdate = findById(id);
+        return save(userMapper.updateUserToEntity(userToUpdate, updatedUser));
     }
 
     @Override
-    public UserEntity findById(Long Id) {
-        return null;
+    public void deleteUser(Long id) {
+        deleteById(id);
+    }
+
+    @Override
+    public UserEntity findById(Long id) throws Exception {
+        return (userRepository.findById(id).orElseThrow(() -> new Exception("Not Found.")));
     }
 
     @Override
     public List<UserEntity> findAll() {
-        return List.of();
+        return userRepository.findAll();
     }
 
     @Override
     public void deleteById(long id) {
-
+        userRepository.deleteById(id);
     }
 
     @Override
-    public UserEntity save(UserEntity entity) {
-        return null;
+    public UserEntity save(UserEntity user) {
+        return userRepository.save(user);
     }
 }
