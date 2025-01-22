@@ -10,7 +10,7 @@ public interface UserService extends GenericService<UserEntity> {
 
     UserDTO getUser(Long id) throws Exception;
 
-    List<UserDTO> getAllusers();
+    List<UserDTO> getAllUsers();
 
     List<RolesDTO> getAllRoles();
 
