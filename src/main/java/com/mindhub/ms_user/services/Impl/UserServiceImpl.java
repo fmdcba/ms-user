@@ -3,7 +3,6 @@ package com.mindhub.ms_user.services.Impl;
 import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.exceptions.NotFoundException;
-import com.mindhub.ms_user.exceptions.NotValidArgument;
 import com.mindhub.ms_user.mappers.UserMapper;
 import com.mindhub.ms_user.models.UserEntity;
 import com.mindhub.ms_user.repositories.UserRepository;
@@ -24,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO getUser(Long id) throws NotFoundException{
+    public UserDTO getUser(Long id) throws NotFoundException {
         if (existsById(id)) {
             return userMapper.userToDTO(findById(id));
         } else {
