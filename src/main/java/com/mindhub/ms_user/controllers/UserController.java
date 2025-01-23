@@ -7,6 +7,8 @@ import com.mindhub.ms_user.exceptions.NotValidArgumentException;
 import com.mindhub.ms_user.models.RoleType;
 import com.mindhub.ms_user.models.UserEntity;
 import com.mindhub.ms_user.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,10 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users/{id}")
+    @Operation(summary = "Get user by id", description = "Return user if ID is valid and exists in DB")
+        @ApiResponse(responseCode = "200", description = "Return user, and http code status OK")
+        @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
+        @ApiResponse(responseCode = "404", description = "Error msg: Not found")
     public ResponseEntity<?> getUser(@PathVariable long id) throws NotFoundException, NotValidArgumentException {
         isValidId(id);
         UserDTO user = userService.getUser(id);
@@ -30,18 +36,25 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @Operation(summary = "Get all users", description = "Return all users in DB")
+        @ApiResponse(responseCode = "200", description = "Return list of users, and http code status OK")
     public ResponseEntity<?> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/roles")
+    @Operation(summary = "Get all roles", description = "Return all roles of the user with its ID")
+        @ApiResponse(responseCode = "200", description = "Return list of roles with user ID, and http code status OK")
     public ResponseEntity<?> getRoles() {
         List<RolesDTO> roles = userService.getAllRoles();
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
     @PostMapping("/users")
+    @Operation(summary = "Create user", description = "Return user if ID is valid and exists in DB")
+        @ApiResponse(responseCode = "200", description = "Return created user, and http code status OK")
+        @ApiResponse(responseCode = "400", description = "Error msg Bad request: Indicating the field that cause the error")
     public ResponseEntity<?> createUser(@RequestBody UserDTO newUser) throws NotValidArgumentException {
         validateEntries(newUser);
         UserEntity newUserEntity = userService.createUser(newUser);
@@ -49,6 +62,10 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
+    @Operation(summary = "Update user", description = "Return user if ID is valid and exists in DB")
+        @ApiResponse(responseCode = "200", description = "Return updated user, and http code status OK")
+        @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
+        @ApiResponse(responseCode = "404", description = "Error msg: Not found")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO updatedUser) throws NotFoundException, NotValidArgumentException {
         validateEntries(updatedUser);
         UserEntity updatedUserToEntity = userService.updateUser(id, updatedUser);
@@ -56,6 +73,10 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
+    @Operation(summary = "Update user", description = "Return user if ID is valid and exists in DB")
+        @ApiResponse(responseCode = "200", description = "Return msg: User deleted successfully, and http code status OK")
+        @ApiResponse(responseCode = "400", description = "Error msg Bad request: Indicating the field that cause the error")
+        @ApiResponse(responseCode = "404", description = "Error msg: Not found")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) throws NotValidArgumentException, NotFoundException {
         isValidId(id);
         userService.deleteUser(id);
