@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    @Operation(summary = "Update user", description = "Return user if ID is valid and exists in DB")
+    @Operation(summary = "Update user", description = "Return updated user if ID is valid and exists in DB")
         @ApiResponse(responseCode = "200", description = "Return updated user, and http code status OK")
         @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
         @ApiResponse(responseCode = "404", description = "Error msg: Not found")
@@ -73,9 +73,9 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    @Operation(summary = "Update user", description = "Return user if ID is valid and exists in DB")
+    @Operation(summary = "Delete user", description = "Return msg of operation completed successfully")
         @ApiResponse(responseCode = "200", description = "Return msg: User deleted successfully, and http code status OK")
-        @ApiResponse(responseCode = "400", description = "Error msg Bad request: Indicating the field that cause the error")
+        @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
         @ApiResponse(responseCode = "404", description = "Error msg: Not found")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) throws NotValidArgumentException, NotFoundException {
         isValidId(id);
