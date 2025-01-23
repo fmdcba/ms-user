@@ -2,6 +2,8 @@ package com.mindhub.ms_user.services.Impl;
 
 import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
+import com.mindhub.ms_user.exceptions.NotFoundException;
+import com.mindhub.ms_user.exceptions.NotValidArgument;
 import com.mindhub.ms_user.mappers.UserMapper;
 import com.mindhub.ms_user.models.UserEntity;
 import com.mindhub.ms_user.repositories.UserRepository;
@@ -22,8 +24,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO getUser(Long id) throws Exception {
-        return userMapper.userToDTO(findById(id));
+    public UserDTO getUser(Long id) throws NotFoundException{
+        if (existsById(id)) {
+            return userMapper.userToDTO(findById(id));
+        } else {
+            throw new NotFoundException("Not found.");
+        }
     }
 
     @Override
@@ -42,19 +48,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity updateUser(Long id, UserDTO updatedUser) throws Exception {
-        UserEntity userToUpdate = findById(id);
-        return save(userMapper.updateUserToEntity(userToUpdate, updatedUser));
+    public UserEntity updateUser(Long id, UserDTO updatedUser) throws NotFoundException {
+        if (existsById(id)) {
+            UserEntity userToUpdate = findById(id);
+            return save(userMapper.updateUserToEntity(userToUpdate, updatedUser));
+        } else {
+            throw new NotFoundException("Not found.");
+        }
     }
 
     @Override
-    public void deleteUser(Long id) {
-        deleteById(id);
+    public void deleteUser(Long id) throws NotFoundException {
+        if (existsById(id)) {
+            deleteById(id);
+        } else {
+            throw new NotFoundException("Not found.");
+        }
     }
 
     @Override
-    public UserEntity findById(Long id) throws Exception {
-        return (userRepository.findById(id).orElseThrow(() -> new Exception("Not Found.")));
+    public UserEntity findById(Long id) throws NotFoundException {
+        return (userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found.")));
     }
 
     @Override
@@ -70,5 +84,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity save(UserEntity user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public Boolean existsById(Long id) {
+        return userRepository.existsById(id);
     }
 }

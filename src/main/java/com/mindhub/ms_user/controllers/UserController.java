@@ -2,6 +2,9 @@ package com.mindhub.ms_user.controllers;
 
 import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
+import com.mindhub.ms_user.exceptions.NotFoundException;
+import com.mindhub.ms_user.exceptions.NotValidArgument;
+import com.mindhub.ms_user.models.RoleType;
 import com.mindhub.ms_user.models.UserEntity;
 import com.mindhub.ms_user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +16,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RestControllerAdvice
 public class UserController {
 
     @Autowired
     UserService userService;
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUser(@PathVariable long id) throws Exception {
+    public ResponseEntity<?> getUser(@PathVariable long id) throws NotFoundException, NotValidArgument {
+        isValidId(id);
         UserDTO user = userService.getUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -37,20 +42,54 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO newUser) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO newUser) throws NotValidArgument {
+        validateEntries(newUser);
         UserEntity newUserEntity = userService.createUser(newUser);
         return new ResponseEntity<>(newUserEntity, HttpStatus.OK);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO updatedUser) throws Exception {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO updatedUser) throws NotFoundException, NotValidArgument {
+        validateEntries(updatedUser);
         UserEntity updatedUserToEntity = userService.updateUser(id, updatedUser);
         return new ResponseEntity<>(updatedUserToEntity, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) throws NotValidArgument {
+        isValidId(id);
         userService.deleteUser(id);
         return new ResponseEntity<>("User deleted successfully.", HttpStatus.OK);
+    }
+
+    public void isValidId(Long id) throws NotValidArgument {
+        if (id == null || id <= 0) {
+            throw new NotValidArgument("Invalid ID");
+        }
+    }
+
+    public void isValidUsername(String username) throws NotValidArgument {
+        if (username == null || username.isBlank()) {
+            throw new NotValidArgument("Username cannot be empty.");
+        }
+    }
+
+    public void isValidEmail(String email) throws NotValidArgument {
+        if (email == null || email.isBlank()) {
+            throw new NotValidArgument("Email cannot be empty.");
+        }
+    }
+
+    public void isValidRoles(RoleType status) throws NotValidArgument {
+        if (status.equals(RoleType.USER) || status.equals(RoleType.ADMIN)) {
+        } else {
+            throw new NotValidArgument("Roles has to be USER or ADMIN.");
+        }
+    }
+
+    public void validateEntries(UserDTO user) throws NotValidArgument {
+        isValidUsername(user.getUsername());
+        isValidEmail(user.getEmail());
+        isValidRoles(user.getRoles());
     }
 }

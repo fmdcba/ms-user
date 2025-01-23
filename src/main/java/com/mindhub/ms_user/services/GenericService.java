@@ -8,4 +8,5 @@ public interface GenericService<E> {
     List<E> findAll();
     void deleteById(long id);
     E save(E entity);
+    Boolean existsById(Long id);
 }
