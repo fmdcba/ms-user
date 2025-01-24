@@ -91,13 +91,13 @@ public class UserController {
 
     public void isValidUsername(String username) throws NotValidArgumentException {
         if (username == null || username.isBlank()) {
-            throw new NotValidArgumentException("Username cannot be empty.");
+            throw new NotValidArgumentException("Username cannot be empty or null.");
         }
     }
 
     public void isValidEmail(String email) throws NotValidArgumentException {
         if (email == null || email.isBlank()) {
-            throw new NotValidArgumentException("Email cannot be empty.");
+            throw new NotValidArgumentException("Email cannot be empty or null.");
         }
     }
 
