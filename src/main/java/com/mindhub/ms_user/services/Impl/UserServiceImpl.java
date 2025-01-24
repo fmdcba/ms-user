@@ -24,10 +24,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUser(Long id) throws NotFoundException {
-        if (existsById(id)) {
+        try {
             return userMapper.userToDTO(findById(id));
-        } else {
-            throw new NotFoundException("Not found.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 
@@ -48,26 +48,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity updateUser(Long id, UserDTO updatedUser) throws NotFoundException {
-        if (existsById(id)) {
+        try {
             UserEntity userToUpdate = findById(id);
             return save(userMapper.updateUserToEntity(userToUpdate, updatedUser));
-        } else {
-            throw new NotFoundException("Not found.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 
     @Override
     public void deleteUser(Long id) throws NotFoundException {
-        if (existsById(id)) {
+        try {
+            existsById(id);
             deleteById(id);
-        } else {
-            throw new NotFoundException("Not found.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 
     @Override
     public UserEntity findById(Long id) throws NotFoundException {
-        return (userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not Found.")));
+        return (userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not Found.")));
     }
 
     @Override
@@ -86,7 +87,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean existsById(Long id) {
-        return userRepository.existsById(id);
+    public void existsById(Long id) throws NotFoundException {
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException("User not found.");
+        }
     }
 }
