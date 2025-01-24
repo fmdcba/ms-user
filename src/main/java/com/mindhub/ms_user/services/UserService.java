@@ -3,6 +3,7 @@ package com.mindhub.ms_user.services;
 import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.exceptions.NotFoundException;
+import com.mindhub.ms_user.exceptions.NotValidArgumentException;
 import com.mindhub.ms_user.models.UserEntity;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface UserService extends GenericService<UserEntity> {
 
     List<RolesDTO> getAllRoles();
 
-    UserEntity createUser(UserDTO newUser);
+    UserEntity createUser(UserDTO newUser) throws NotValidArgumentException;
 
-    UserEntity updateUser(Long id, UserDTO updatedUser) throws NotFoundException;
+    UserEntity updateUser(Long id, UserDTO updatedUser) throws NotFoundException, NotValidArgumentException;
 
     void deleteUser(Long id) throws NotFoundException;
 }
