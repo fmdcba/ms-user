@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @RestControllerAdvice
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Get user by id", description = "Return user if ID is valid and exists in DB")
         @ApiResponse(responseCode = "200", description = "Return user, and http code status OK")
         @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
@@ -36,7 +36,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/users")
+    @GetMapping
     @Operation(summary = "Get all users", description = "Return all users in DB")
         @ApiResponse(responseCode = "200", description = "Return list of users, and http code status OK")
     public ResponseEntity<?> getAllUsers() {
@@ -52,7 +52,7 @@ public class UserController {
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
-    @PostMapping("/users")
+    @PostMapping
     @Operation(summary = "Create user", description = "Return user if ID is valid and exists in DB")
         @ApiResponse(responseCode = "200", description = "Return created user, and http code status OK")
         @ApiResponse(responseCode = "400", description = "Error msg Bad request: Indicating the field that cause the error")
@@ -62,7 +62,7 @@ public class UserController {
         return new ResponseEntity<>(newUserEntity, HttpStatus.OK);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Update user", description = "Return updated user if ID is valid and exists in DB")
         @ApiResponse(responseCode = "200", description = "Return updated user, and http code status OK")
         @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
@@ -73,7 +73,7 @@ public class UserController {
         return new ResponseEntity<>(updatedUserToEntity, HttpStatus.OK);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Delete user", description = "Return msg of operation completed successfully")
         @ApiResponse(responseCode = "200", description = "Return msg: User deleted successfully, and http code status OK")
         @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
