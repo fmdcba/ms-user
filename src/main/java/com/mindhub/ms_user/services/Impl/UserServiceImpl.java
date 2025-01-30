@@ -1,5 +1,6 @@
 package com.mindhub.ms_user.services.Impl;
 
+import com.mindhub.ms_user.dtos.NewUserDTO;
 import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.exceptions.NotFoundException;
@@ -43,9 +44,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity createUser(UserDTO newUser) throws NotValidArgumentException {
+    public UserEntity createUser(NewUserDTO newUser) throws NotValidArgumentException {
         try {
-            validateAlreadyExistsEntries(newUser.getUsername(), newUser.getEmail());
+            validateAlreadyExistsEntries(newUser.username(), newUser.email());
             return save(userMapper.userToEntity(newUser));
         } catch (NotValidArgumentException e) {
             throw new NotValidArgumentException(e.getMessage());
@@ -53,10 +54,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity updateUser(Long id, UserDTO updatedUser) throws NotFoundException, NotValidArgumentException {
+    public UserEntity updateUser(Long id, NewUserDTO updatedUser) throws NotFoundException, NotValidArgumentException {
         try {
             UserEntity userToUpdate = findById(id);
-            validateAlreadyExistsEntries(updatedUser.getUsername(), updatedUser.getEmail());
+            validateAlreadyExistsEntries(updatedUser.username(), updatedUser.email());
             return save(userMapper.updateUserToEntity(userToUpdate, updatedUser));
         } catch (NotFoundException | NotValidArgumentException e) {
             throw e;

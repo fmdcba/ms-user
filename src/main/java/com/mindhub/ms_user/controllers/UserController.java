@@ -1,5 +1,6 @@
 package com.mindhub.ms_user.controllers;
 
+import com.mindhub.ms_user.dtos.NewUserDTO;
 import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.exceptions.NotFoundException;
@@ -55,7 +56,7 @@ public class UserController {
     @Operation(summary = "Create user", description = "Return user if ID is valid and exists in DB")
         @ApiResponse(responseCode = "200", description = "Return created user, and http code status OK")
         @ApiResponse(responseCode = "400", description = "Error msg Bad request: Indicating the field that cause the error")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO newUser) throws NotValidArgumentException {
+    public ResponseEntity<?> createUser(@RequestBody NewUserDTO newUser) throws NotValidArgumentException {
         validateEntries(newUser);
         UserEntity newUserEntity = userService.createUser(newUser);
         return new ResponseEntity<>(newUserEntity, HttpStatus.OK);
@@ -66,7 +67,7 @@ public class UserController {
         @ApiResponse(responseCode = "200", description = "Return updated user, and http code status OK")
         @ApiResponse(responseCode = "400", description = "Error msg Bad request: Invalid ID")
         @ApiResponse(responseCode = "404", description = "Error msg: Not found")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO updatedUser) throws NotFoundException, NotValidArgumentException {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody NewUserDTO updatedUser) throws NotFoundException, NotValidArgumentException {
         validateEntries(updatedUser);
         UserEntity updatedUserToEntity = userService.updateUser(id, updatedUser);
         return new ResponseEntity<>(updatedUserToEntity, HttpStatus.OK);
@@ -108,9 +109,9 @@ public class UserController {
         }
     }
 
-    public void validateEntries(UserDTO user) throws NotValidArgumentException {
-        isValidUsername(user.getUsername());
-        isValidEmail(user.getEmail());
-        isValidRoles(user.getRoles());
+    public void validateEntries(NewUserDTO user) throws NotValidArgumentException {
+        isValidUsername(user.username());
+        isValidEmail(user.email());
+        isValidRoles(user.roles());
     }
 }

@@ -2,6 +2,8 @@ package com.mindhub.ms_user.models;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 public class UserEntity {
 
@@ -11,11 +13,14 @@ public class UserEntity {
 
     private String username, email;
 
+    private String password;
+
     private RoleType roles;
 
-    public UserEntity(String username, String email, RoleType roles) {
+    public UserEntity(String username, String email, String password, RoleType roles) {
         this.username = username;
         this.email = email;
+        this.password = password;
         this.roles = roles;
     }
 
@@ -39,6 +44,14 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public RoleType getRoles() {
