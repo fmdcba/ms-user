@@ -15,7 +15,7 @@ import java.util.List;
 public class UserMapper {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     public UserDTO userToDTO (UserEntity user) {
         return new UserDTO(user);
