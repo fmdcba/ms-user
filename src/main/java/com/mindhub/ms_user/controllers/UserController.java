@@ -6,7 +6,6 @@ import com.mindhub.ms_user.dtos.UserDTO;
 import com.mindhub.ms_user.exceptions.NotAuthorizedException;
 import com.mindhub.ms_user.exceptions.NotFoundException;
 import com.mindhub.ms_user.exceptions.NotValidArgumentException;
-import com.mindhub.ms_user.models.UserEntity;
 import com.mindhub.ms_user.services.UserService;
 import com.mindhub.ms_user.utils.ControllerValidations;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
