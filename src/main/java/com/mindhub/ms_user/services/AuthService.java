@@ -8,5 +8,7 @@ public interface AuthService {
 
     void registerUser(NewUserDTO newUser) throws NotValidArgumentException;
 
+    void validateUser(String token);
+
     String loginUser(NewUserDTO loginRequest) throws NotValidArgumentException;
 }

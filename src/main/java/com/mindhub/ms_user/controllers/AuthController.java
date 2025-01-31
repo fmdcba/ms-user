@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -41,6 +38,12 @@ public class AuthController {
         controllerValidations.validateEntries(newUserDTO);
         authService.registerUser(newUserDTO);
         return new ResponseEntity<>("User registered successfully.", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> saveUser(@RequestParam String token) throws NotValidArgumentException {
+        authService.validateUser(token);
+        return new ResponseEntity<>("User validated successfully.", HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

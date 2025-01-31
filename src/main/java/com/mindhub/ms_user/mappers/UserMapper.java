@@ -3,12 +3,14 @@ package com.mindhub.ms_user.mappers;
 import com.mindhub.ms_user.dtos.NewUserDTO;
 import com.mindhub.ms_user.dtos.RolesDTO;
 import com.mindhub.ms_user.dtos.UserDTO;
+import com.mindhub.ms_user.dtos.ValidUserDTO;
 import com.mindhub.ms_user.models.RoleType;
 import com.mindhub.ms_user.models.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.management.relation.Role;
 import java.util.List;
 
 @Component
@@ -27,6 +29,10 @@ public class UserMapper {
 
     public UserEntity userToEntity (NewUserDTO user){
         return new UserEntity(user.username(), user.email(), passwordEncoder.encode(user.password()), user.roles());
+    }
+
+    public UserEntity validUser (ValidUserDTO userDTO) {
+        return new UserEntity(userDTO.username(), userDTO.email(), userDTO.password(), RoleType.USER);
     }
 
     public UserEntity updateUserToEntity (UserEntity userToUpdate, NewUserDTO updatedUser) {

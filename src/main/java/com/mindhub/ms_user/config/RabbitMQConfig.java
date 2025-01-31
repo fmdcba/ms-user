@@ -18,6 +18,7 @@ public class RabbitMQConfig {
 
     public static final String EXCHANGE_NAME = "app.exchange";
     public static final String USER_CREATED_ROUTING_KEY = "user.created";
+    public static final String USER_VALIDATED_ROUTING_KEY = "user.validated";
 
 
     @Bean

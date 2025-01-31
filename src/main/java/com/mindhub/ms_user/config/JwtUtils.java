@@ -4,7 +4,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,6 +23,9 @@ public class JwtUtils {
 
     @Value("${jwt.expiration}")
     private long expiration;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public JwtUtils(@Value("${jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
@@ -43,7 +48,6 @@ public class JwtUtils {
         claims.put("id", id.toString());
         return claims;
     }
-
 
     public boolean validateToken(String token, String username) {
         final String tokenUsername = extractUsername(token);
@@ -84,6 +88,14 @@ public class JwtUtils {
         return parseClaims(token).get("role", String.class);
     }
 
+    public String extractEmail(String token) {
+        return parseClaims(token).get("email", String.class);
+    }
+
+    public String extractPassword(String token) {
+        return parseClaims(token).get("password", String.class);
+    }
+
     public String getJwtToken() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if(attributes != null) {
@@ -94,5 +106,23 @@ public class JwtUtils {
             }
         }
         return null;
+    }
+
+    public String generateTemporaryToken(String username, String email, String password) {
+        Map<String, String> claims = generateClaimsForToken(email, passwordEncoder.encode(password));
+        return Jwts.builder()
+                .subject(username)
+                .claims(claims)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public Map<String, String> generateClaimsForToken(String email, String password){
+        Map<String, String> claims = new HashMap<>();
+        claims.put("email", email);
+        claims.put("password", password.toString());
+        return claims;
     }
 }

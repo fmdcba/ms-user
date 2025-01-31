@@ -1,6 +1,5 @@
 package com.mindhub.ms_user.exceptions;
 
-import jakarta.ws.rs.NotAuthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
