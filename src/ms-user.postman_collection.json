@@ -10,19 +10,143 @@
 			"name": "ms-user",
 			"item": [
 				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"username\": \"newuser\", \"email\": \"daniaranda.003@gmail.com\", \"password\": \"newuser123\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/auth/register"
+							},
+							"response": []
+						},
+						{
+							"name": "Login User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"JWT\", pm.response.text())"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"pepe@pepe.com\",\r\n    \"password\" : \"pass\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"JWT\", pm.response.text())"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"pepe@admin.com\",\r\n    \"password\" : \"pass\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "Validate User",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/auth/validate?token=",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"auth",
+										"validate"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Exceptions",
 					"item": [
 						{
 							"name": "Get Non-Existent User",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8081/api/users/:id",
+									"raw": "localhost:8080/api/users/:id",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"users",
@@ -41,14 +165,20 @@
 						{
 							"name": "Get User With Invalid ID",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8081/api/users/:id",
+									"raw": "localhost:8080/api/users/:id",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"users",
@@ -67,6 +197,12 @@
 						{
 							"name": "Create User With Invalid Field",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -78,13 +214,19 @@
 										}
 									}
 								},
-								"url": "localhost:8081/api/users"
+								"url": "localhost:8080/api/users"
 							},
 							"response": []
 						},
 						{
 							"name": "Update Non-Existent User",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -97,11 +239,11 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8081/api/users/:id",
+									"raw": "localhost:8080/api/users/:id",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"users",
@@ -120,6 +262,12 @@
 						{
 							"name": "Update With Null Username",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -132,11 +280,11 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8081/api/users/:id",
+									"raw": "localhost:8080/api/users/:id",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"users",
@@ -155,6 +303,12 @@
 						{
 							"name": "Update With Taken Username",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -167,11 +321,11 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8081/api/users/:id",
+									"raw": "localhost:8080/api/users/:id",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"users",
@@ -190,14 +344,20 @@
 						{
 							"name": "Delete Non-Existent User",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{JWT}}"
+									}
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "localhost:8081/api/users/:id",
+									"raw": "localhost:8080/api/users/:id",
 									"host": [
 										"localhost"
 									],
-									"port": "8081",
+									"port": "8080",
 									"path": [
 										"api",
 										"users",
@@ -218,14 +378,20 @@
 				{
 					"name": "Get User",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/api/users/:id",
+							"raw": "localhost:8080/api/users/:id",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"api",
 								"users",
@@ -234,7 +400,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "3"
 								}
 							]
 						}
@@ -244,14 +410,20 @@
 				{
 					"name": "Get Admin",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/api/users/:id",
+							"raw": "localhost:8080/api/users/:id",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"api",
 								"users",
@@ -270,47 +442,71 @@
 				{
 					"name": "Get all Users",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
 						"method": "GET",
 						"header": [],
-						"url": "localhost:8081/api/users"
+						"url": "localhost:8080/api/users"
 					},
 					"response": []
 				},
 				{
 					"name": "Get all Roles",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
 						"method": "GET",
 						"header": [],
-						"url": "localhost:8081/api/roles"
+						"url": "localhost:8080/api/users/roles"
 					},
 					"response": []
 				},
 				{
 					"name": "Create User",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"fulano\", \"email\": \"fulano@full.com\", \"roles\": \"USER\"}",
+							"raw": "{\"username\": \"fulano\", \"password\": \"pass\", \"email\": \"fulano@full.com\", \"roles\": \"USER\"}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "localhost:8081/api/users"
+						"url": "localhost:8080/api/users"
 					},
 					"response": []
 				},
 				{
 					"name": "Update User",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"pepe\", \"email\": \"fulano@fulano.com\", \"roles\": \"USER\"}\r\n",
+							"raw": "{\"username\": \"pepe\", \"email\": \"fulano@fulano.com\", \"password\": \"pass\", \"roles\": \"USER\"}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -318,11 +514,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/users/:id",
+							"raw": "localhost:8080/api/users/:id",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"api",
 								"users",
@@ -331,7 +527,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "1"
 								}
 							]
 						}
@@ -341,14 +537,20 @@
 				{
 					"name": "Delete User",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/api/users/:id",
+							"raw": "localhost:8080/api/users/:id",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"api",
 								"users",
