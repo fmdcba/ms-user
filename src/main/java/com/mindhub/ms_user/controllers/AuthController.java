@@ -37,7 +37,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody NewUserDTO newUserDTO) throws NotValidArgumentException {
         controllerValidations.validateEntries(newUserDTO);
         authService.registerUser(newUserDTO);
-        return new ResponseEntity<>("User registered successfully.", HttpStatus.CREATED);
+        return new ResponseEntity<>("User registered successfully. Validate your account (Later we'll ask for password change)", HttpStatus.CREATED);
     }
 
     @GetMapping("/validate")

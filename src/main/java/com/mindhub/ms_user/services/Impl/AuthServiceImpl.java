@@ -24,6 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -67,10 +70,14 @@ public class AuthServiceImpl implements AuthService {
                     userDTO
             );
 
+            Map<String, String> validationData = new HashMap<>();
+            validationData.put("temporaryToken", temporaryToken);
+            validationData.put("email", newUser.email());
+
             amqpTemplate.convertAndSend(
                     RabbitMQConfig.EXCHANGE_NAME,
                     RabbitMQConfig.USER_VALIDATED_ROUTING_KEY,
-                    temporaryToken
+                    validationData
             );
 
         } catch (NotValidArgumentException e) {
